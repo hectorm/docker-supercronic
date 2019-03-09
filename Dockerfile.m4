@@ -54,7 +54,7 @@ RUN groupadd \
 RUN useradd \
 		--uid "${SUPERCRONIC_USER_UID}" \
 		--gid "${SUPERCRONIC_USER_GID}" \
-		--shell="$(which bash)" \
+		--shell "$(which bash)" \
 		--home-dir /home/supercronic/ \
 		--create-home \
 		supercronic
