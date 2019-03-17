@@ -18,6 +18,12 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 FROM golang:1-stretch AS build-supercronic
 m4_ifdef([[CROSS_QEMU]], [[COPY --from=qemu-user-static CROSS_QEMU CROSS_QEMU]])
 
+# Install system packages
+RUN export DEBIAN_FRONTEND=noninteractive \
+	&& apt-get update \
+	&& apt-get install -y --no-install-recommends \
+		file
+
 # Build Dep
 RUN go get -v -d github.com/golang/dep \
 	&& cd "${GOPATH}/src/github.com/golang/dep" \
@@ -38,6 +44,7 @@ RUN cd "${GOPATH}/src/github.com/aptible/supercronic" \
 	&& export GOARM=m4_ifdef([[CROSS_GOARM]], [[CROSS_GOARM]]) \
 	&& go build -o ./supercronic ./main.go \
 	&& mv ./supercronic /usr/bin/supercronic \
+	&& file /usr/bin/supercronic \
 	&& /usr/bin/supercronic -test ./integration/hello.crontab
 
 ##################################################
