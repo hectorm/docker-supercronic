@@ -22,7 +22,9 @@ m4_ifdef([[CROSS_QEMU]], [[COPY --from=qemu-user-static CROSS_QEMU CROSS_QEMU]])
 RUN export DEBIAN_FRONTEND=noninteractive \
 	&& apt-get update \
 	&& apt-get install -y --no-install-recommends \
-		file
+		file \
+		tzdata \
+	&& rm -rf /var/lib/apt/lists/*
 
 # Build Dep
 RUN go get -v -d github.com/golang/dep \
@@ -53,6 +55,13 @@ RUN cd "${GOPATH}/src/github.com/aptible/supercronic" \
 
 m4_ifdef([[CROSS_ARCH]], [[FROM CROSS_ARCH/ubuntu:18.04]], [[FROM ubuntu:18.04]]) AS supercronic
 m4_ifdef([[CROSS_QEMU]], [[COPY --from=qemu-user-static CROSS_QEMU CROSS_QEMU]])
+
+# Install system packages
+RUN export DEBIAN_FRONTEND=noninteractive \
+	&& apt-get update \
+	&& apt-get install -y --no-install-recommends \
+		tzdata \
+	&& rm -rf /var/lib/apt/lists/*
 
 # Create users and groups
 ARG SUPERCRONIC_USER_UID=1000
