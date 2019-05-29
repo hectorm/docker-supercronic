@@ -52,6 +52,13 @@ m4_ifdef([[CROSS_QEMU]], [[COPY --from=hectormolinero/qemu-user-static:latest CR
 RUN export DEBIAN_FRONTEND=noninteractive \
 	&& apt-get update \
 	&& apt-get install -y --no-install-recommends \
+		ca-certificates \
+		curl \
+		dnsutils \
+		iputils-ping \
+		jq \
+		netcat-openbsd \
+		openssl \
 		tzdata \
 	&& rm -rf /var/lib/apt/lists/*
 
