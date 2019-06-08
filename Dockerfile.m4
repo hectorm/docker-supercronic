@@ -27,7 +27,7 @@ RUN cd "${GOPATH}/src/github.com/golang/dep" \
 	&& mv ./cmd/dep/dep /usr/bin/dep
 
 # Build Supercronic
-ARG SUPERCRONIC_TREEISH=v0.1.8
+ARG SUPERCRONIC_TREEISH=v0.1.9
 RUN go get -v -d github.com/aptible/supercronic \
 	&& cd "${GOPATH}/src/github.com/aptible/supercronic" \
 	&& git checkout "${SUPERCRONIC_TREEISH}" \
