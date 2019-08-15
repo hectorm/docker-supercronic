@@ -85,6 +85,14 @@ RUN useradd \
 		--create-home \
 		supercronic
 
+# Setup locale
+RUN sed -i 's|^# \(en_US\.UTF-8 UTF-8\)$|\1|' /etc/locale.gen && locale-gen
+ENV LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8
+
+# Setup timezone
+ENV TZ=Etc/UTC
+RUN ln -sf /usr/share/zoneinfo/"${TZ}" /etc/localtime
+
 # Copy Supercronic build
 COPY --from=build-supercronic --chown=root:root /usr/bin/supercronic /usr/bin/supercronic
 
