@@ -52,23 +52,34 @@ m4_ifdef([[CROSS_QEMU]], [[COPY --from=docker.io/hectormolinero/qemu-user-static
 RUN export DEBIAN_FRONTEND=noninteractive \
 	&& apt-get update \
 	&& apt-get install -y --no-install-recommends \
+		bzip2 \
 		ca-certificates \
 		curl \
 		dnsutils \
+		file \
 		gawk \
 		git \
 		gnupg \
+		grep \
+		idn2 \
 		iputils-ping \
 		jq \
 		lftp \
 		locales \
+		make \
+		mime-support \
 		netcat-openbsd \
 		openssh-client \
 		openssl \
+		patch \
+		publicsuffix \
 		rsync \
+		sed \
 		tzdata \
+		unzip \
 		wget \
 		xz-utils \
+		zip \
 	&& rm -rf /var/lib/apt/lists/*
 
 # Create users and groups
