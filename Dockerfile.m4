@@ -55,11 +55,20 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 		ca-certificates \
 		curl \
 		dnsutils \
+		gawk \
+		git \
+		gnupg \
 		iputils-ping \
 		jq \
+		lftp \
+		locales \
 		netcat-openbsd \
+		openssh-client \
 		openssl \
+		rsync \
 		tzdata \
+		wget \
+		xz-utils \
 	&& rm -rf /var/lib/apt/lists/*
 
 # Create users and groups
