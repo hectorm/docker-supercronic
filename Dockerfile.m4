@@ -1,10 +1,10 @@
 m4_changequote([[, ]])
 
 ##################################################
-## "build-supercronic" stage
+## "build" stage
 ##################################################
 
-FROM docker.io/golang:1-stretch AS build-supercronic
+FROM docker.io/golang:1-stretch AS build
 m4_ifdef([[CROSS_QEMU]], [[COPY --from=docker.io/hectormolinero/qemu-user-static:latest CROSS_QEMU CROSS_QEMU]])
 
 # Environment
@@ -107,7 +107,7 @@ RUN ln -snf "/usr/share/zoneinfo/${TZ:?}" /etc/localtime
 RUN printf '%s\n' "${TZ:?}" > /etc/timezone
 
 # Copy Supercronic build
-COPY --from=build-supercronic --chown=root:root /usr/bin/supercronic /usr/bin/supercronic
+COPY --from=build --chown=root:root /usr/bin/supercronic /usr/bin/supercronic
 
 # Copy crontab
 COPY --chown=root:root ./config/crontab /etc/crontab
