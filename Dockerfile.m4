@@ -8,6 +8,7 @@ FROM docker.io/golang:1-buster AS build
 m4_ifdef([[CROSS_QEMU]], [[COPY --from=docker.io/hectormolinero/qemu-user-static:latest CROSS_QEMU CROSS_QEMU]])
 
 # Environment
+ENV GO111MODULE=on
 ENV CGO_ENABLED=0
 
 # Install system packages
@@ -17,21 +18,10 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 		file \
 		tzdata
 
-# Build Dep
-RUN go get -v -d github.com/golang/dep \
-	&& cd "${GOPATH:?}/src/github.com/golang/dep" \
-	&& git checkout "$(git describe --abbrev=0 --tags)"
-RUN cd "${GOPATH:?}/src/github.com/golang/dep" \
-	&& go build -o ./cmd/dep/dep ./cmd/dep/ \
-	&& mv ./cmd/dep/dep /usr/bin/dep
-
 # Build Supercronic
-ARG SUPERCRONIC_TREEISH=v0.1.9
-RUN go get -v -d github.com/aptible/supercronic \
-	&& cd "${GOPATH:?}/src/github.com/aptible/supercronic" \
-	&& git checkout "${SUPERCRONIC_TREEISH:?}" \
-	&& dep ensure
-RUN cd "${GOPATH:?}/src/github.com/aptible/supercronic" \
+ARG SUPERCRONIC_TREEISH=v0.1.10
+RUN go get -v -d "github.com/aptible/supercronic@${SUPERCRONIC_TREEISH:?}"
+RUN cd "${GOPATH:?}/pkg/mod/github.com/aptible/supercronic@${SUPERCRONIC_TREEISH:?}" \
 	&& export GOOS=m4_ifdef([[CROSS_GOOS]], [[CROSS_GOOS]]) \
 	&& export GOARCH=m4_ifdef([[CROSS_GOARCH]], [[CROSS_GOARCH]]) \
 	&& export GOARM=m4_ifdef([[CROSS_GOARM]], [[CROSS_GOARM]]) \
