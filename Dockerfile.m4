@@ -19,7 +19,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 		tzdata
 
 # Build Supercronic
-ARG SUPERCRONIC_TREEISH=v0.1.10
+ARG SUPERCRONIC_TREEISH=v0.1.11
 RUN go get -v -d "github.com/aptible/supercronic@${SUPERCRONIC_TREEISH:?}"
 RUN cd "${GOPATH:?}/pkg/mod/github.com/aptible/supercronic@${SUPERCRONIC_TREEISH:?}" \
 	&& export GOOS=m4_ifdef([[CROSS_GOOS]], [[CROSS_GOOS]]) \
