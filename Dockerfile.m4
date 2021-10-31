@@ -100,6 +100,7 @@ COPY --from=build --chown=root:root /usr/bin/supercronic /usr/bin/supercronic
 
 # Copy crontab
 COPY --chown=root:root ./config/crontab /etc/crontab
+RUN find /etc/crontab -type f -not -perm 0644 -exec chmod 0644 '{}' ';'
 
 # Drop root privileges
 USER supercronic:supercronic
