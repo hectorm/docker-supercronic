@@ -16,7 +16,8 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 	&& apt-get update \
 	&& apt-get install -y --no-install-recommends \
 		file \
-		tzdata
+		tzdata \
+	&& rm -rf /var/lib/apt/lists/*
 
 # Build Supercronic
 ARG SUPERCRONIC_TREEISH=v0.1.12
