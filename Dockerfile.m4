@@ -10,6 +10,9 @@ m4_ifdef([[CROSS_QEMU]], [[COPY --from=docker.io/hectormolinero/qemu-user-static
 # Environment
 ENV GO111MODULE=on
 ENV CGO_ENABLED=0
+ENV GOOS=m4_ifdef([[CROSS_GOOS]], [[CROSS_GOOS]])
+ENV GOARCH=m4_ifdef([[CROSS_GOARCH]], [[CROSS_GOARCH]])
+ENV GOARM=m4_ifdef([[CROSS_GOARM]], [[CROSS_GOARM]])
 
 # Install system packages
 RUN export DEBIAN_FRONTEND=noninteractive \
@@ -21,15 +24,15 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 
 # Build Supercronic
 ARG SUPERCRONIC_TREEISH=v0.1.12
-RUN go get -v -d "github.com/aptible/supercronic@${SUPERCRONIC_TREEISH:?}"
-RUN cd "${GOPATH:?}/pkg/mod/github.com/aptible/supercronic@${SUPERCRONIC_TREEISH:?}" \
-	&& export GOOS=m4_ifdef([[CROSS_GOOS]], [[CROSS_GOOS]]) \
-	&& export GOARCH=m4_ifdef([[CROSS_GOARCH]], [[CROSS_GOARCH]]) \
-	&& export GOARM=m4_ifdef([[CROSS_GOARM]], [[CROSS_GOARM]]) \
-	&& go build -o ./supercronic -ldflags '-s -w' ./main.go \
-	&& mv ./supercronic /usr/bin/supercronic \
-	&& file /usr/bin/supercronic \
-	&& /usr/bin/supercronic -test ./integration/hello.crontab
+ARG SUPERCRONIC_REMOTE=https://github.com/aptible/supercronic.git
+WORKDIR /go/src/supercronic/
+RUN git clone "${SUPERCRONIC_REMOTE:?}" ./
+RUN git checkout "${SUPERCRONIC_TREEISH:?}"
+RUN git submodule update --init --recursive
+RUN go build -o ./supercronic -ldflags '-s -w' ./main.go
+RUN mv ./supercronic /usr/bin/supercronic
+RUN file /usr/bin/supercronic
+RUN /usr/bin/supercronic -test ./integration/hello.crontab
 
 ##################################################
 ## "supercronic" stage
