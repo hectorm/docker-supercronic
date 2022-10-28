@@ -35,7 +35,7 @@ RUN file /usr/bin/supercronic
 RUN /usr/bin/supercronic -test ./integration/hello.crontab
 
 ##################################################
-## "supercronic" stage
+## "main" stage
 ##################################################
 
 m4_ifdef([[CROSS_ARCH]], [[FROM docker.io/CROSS_ARCH/ubuntu:22.04]], [[FROM docker.io/ubuntu:22.04]]) AS main
