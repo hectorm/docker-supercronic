@@ -53,6 +53,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 		gawk \
 		git \
 		gnupg \
+		gosu \
 		grep \
 		idn2 \
 		iputils-ping \
