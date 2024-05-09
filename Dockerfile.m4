@@ -50,6 +50,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 		curl \
 		dnsutils \
 		file \
+		findutils \
 		gawk \
 		git \
 		gnupg \
@@ -59,13 +60,17 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 		iputils-ping \
 		jq \
 		lftp \
+		libarchive-tools \
 		locales \
 		make \
 		mime-support \
+		moreutils \
+		msmtp \
 		netcat-openbsd \
 		openssh-client \
 		openssl \
 		patch \
+		perl \
 		publicsuffix \
 		rsync \
 		sed \
@@ -74,6 +79,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 		wget \
 		xz-utils \
 		zip \
+		zstd \
 	&& rm -rf /var/lib/apt/lists/*
 
 # Create users and groups
