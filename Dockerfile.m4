@@ -37,7 +37,7 @@ RUN /usr/bin/supercronic -test ./integration/hello.crontab
 ## "main" stage
 ##################################################
 
-m4_ifdef([[CROSS_ARCH]], [[FROM docker.io/CROSS_ARCH/ubuntu:22.04]], [[FROM docker.io/ubuntu:22.04]]) AS main
+m4_ifdef([[CROSS_ARCH]], [[FROM docker.io/CROSS_ARCH/ubuntu:24.04]], [[FROM docker.io/ubuntu:24.04]]) AS main
 
 # Install system packages
 RUN export DEBIAN_FRONTEND=noninteractive \
@@ -61,7 +61,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 		libarchive-tools \
 		locales \
 		make \
-		mime-support \
+		media-types \
 		moreutils \
 		msmtp \
 		netcat-openbsd \
@@ -80,19 +80,8 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 		zstd \
 	&& rm -rf /var/lib/apt/lists/*
 
-# Create users and groups
-ARG SUPERCRONIC_USER_UID=1000
-ARG SUPERCRONIC_USER_GID=1000
-RUN groupadd \
-		--gid "${SUPERCRONIC_USER_GID:?}" \
-		supercronic
-RUN useradd \
-		--uid "${SUPERCRONIC_USER_UID:?}" \
-		--gid "${SUPERCRONIC_USER_GID:?}" \
-		--shell "$(command -v bash)" \
-		--home-dir /home/supercronic/ \
-		--create-home \
-		supercronic
+# Create unprivileged user
+RUN userdel -rf "$(id -nu 1000)" && useradd -u 1000 -g 0 -s "$(command -v bash)" -m supercronic
 
 # Setup locale
 ENV LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8
@@ -112,7 +101,7 @@ COPY --chown=root:root ./config/crontab /etc/crontab
 RUN find /etc/crontab -type f -not -perm 0644 -exec chmod 0644 '{}' ';'
 
 # Drop root privileges
-USER supercronic:supercronic
+USER supercronic:root
 
 ENTRYPOINT ["/usr/bin/supercronic"]
 CMD ["/etc/crontab"]
