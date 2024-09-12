@@ -22,7 +22,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 	&& rm -rf /var/lib/apt/lists/*
 
 # Build Supercronic
-ARG SUPERCRONIC_TREEISH=v0.2.30
+ARG SUPERCRONIC_TREEISH=v0.2.32
 ARG SUPERCRONIC_REMOTE=https://github.com/aptible/supercronic.git
 WORKDIR /go/src/supercronic/
 RUN git clone "${SUPERCRONIC_REMOTE:?}" ./
